@@ -30,7 +30,7 @@ from PIL import Image
 
 parser = BaseOptions()
 
-def gen_mesh(res, net, cuda, data, save_path, thresh=0.8, use_octree=True, components=False):
+def gen_mesh(res, net, cuda, data, save_path, thresh=0.5, use_octree=True, components=False):
     image_tensor_global = data['img_512'].to(device=cuda)
     image_tensor = data['img'].to(device=cuda)
     calib_tensor = data['calib'].to(device=cuda)
@@ -129,6 +129,7 @@ def gen_mesh_imgColor(res, net, cuda, data, save_path, thresh=0.5, use_octree=Tr
 
 
 def recon(opt, use_rect=False):
+    print("Haaaaaaaaaaaaaaaaaaaaaaaaaaaa", opt.resolution)
     # load checkpoints
     state_dict_path = None
     if opt.load_netMR_checkpoint_path is not None:
