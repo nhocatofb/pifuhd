@@ -30,7 +30,7 @@ from PIL import Image
 
 parser = BaseOptions()
 
-def gen_mesh(res, net, cuda, data, save_path, thresh=0.2, use_octree=True, components=False):
+def gen_mesh(res, net, cuda, data, save_path, thresh=0.6, use_octree=True, components=False):
     image_tensor_global = data['img_512'].to(device=cuda)
     image_tensor = data['img'].to(device=cuda)
     calib_tensor = data['calib'].to(device=cuda)
@@ -58,14 +58,14 @@ def gen_mesh(res, net, cuda, data, save_path, thresh=0.2, use_octree=True, compo
         cv2.imwrite(save_img_path, save_img)
 
         verts, faces, _, _ = reconstruction(
-            net, cuda, calib_tensor, res, b_min, b_max, thresh, use_octree=use_octree, num_samples=100000)
+            net, cuda, calib_tensor, res, b_min, b_max, thresh, use_octree=use_octree, num_samples=200000)
         verts_tensor = torch.from_numpy(verts.T).unsqueeze(0).to(device=cuda).float()
         # if 'calib_world' in data:
         #     calib_world = data['calib_world'].numpy()[0]
         #     verts = np.matmul(np.concatenate([verts, np.ones_like(verts[:,:1])],1), inv(calib_world).T)[:,:3]
 
         color = np.zeros(verts.shape)
-        interval = 100000
+        interval = 200000
         for i in range(len(color) // interval + 1):
             left = i * interval
             if i == len(color) // interval:
